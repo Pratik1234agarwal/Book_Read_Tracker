@@ -1,6 +1,7 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
+import Book from './book';
 
 class BooksApp extends React.Component {
   state = {
@@ -11,19 +12,11 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false,
-    query: "",
     content: [],
-  };
-
-  changeQuery = (query) => {
-    this.setState(() => ({
-      query: query.trim(),
-    }));
   };
 
   changeContent = (query) => {
     if (query !== "") {
-      this.changeQuery(query);
       BooksAPI.search(query).then((data) => {
         let books = data;
         if (data.error) {
@@ -75,37 +68,8 @@ class BooksApp extends React.Component {
             <div className="search-books-results">
               <ol className="books-grid">
                 {this.state.content.map((book) => (
-                  <li>
-                    {!book.imageLinks && (console.log(book))}
-                    <div className="book">
-                      <div className="book-top">
-                        <div
-                          className="book-cover"
-                          style={book.imageLinks && ({
-                            width: 128,
-                            height: 193,
-                            backgroundImage:
-                             
-                             `url(${book.imageLinks.thumbnail})`,
-                          })}
-                        />
-                        <div className="book-shelf-changer">
-                          <select>
-                            <option value="move" disabled>
-                              Move to...
-                            </option>
-                            <option value="currentlyReading">
-                              Currently Reading
-                            </option>
-                            <option value="wantToRead">Want to Read</option>
-                            <option value="read">Read</option>
-                            <option value="none">None</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="book-title">{book.title}</div>
-                      <div className="book-authors">{book.authors}</div>
-                    </div>
+                  <li key={book.id}>
+                    <Book book={book}/>
                   </li>
                 ))}
               </ol>
