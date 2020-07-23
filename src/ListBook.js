@@ -15,13 +15,13 @@ function ListBook(prop){
                   <h2 className="bookshelf-title">Currently Reading</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                      {prop.currentlyReading.map((book)=>(
-                        <li key={book.id}>
+                      {prop.books.map((book)=>(
+                        book.shelf==="currentlyReading" &&(<li key={book.id}>
                           <Book 
-                            book={book} 
-                            onChange={prop.onChange.changeFromCurrentlyReading}
+                            updateShelf = {prop.updateShelf}
+                            book={book}
                           />
-                        </li>
+                        </li>)
                       ))}
                     </ol>
                   </div>
@@ -30,13 +30,13 @@ function ListBook(prop){
                   <h2 className="bookshelf-title">Want to Read</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                    {prop.wantToRead.map((book)=>(
-                        <li key={book.id}>
+                    {prop.books.map((book)=>(
+                        book.shelf==='wantToRead' &&(<li key={book.id}>
                           <Book 
-                            book={book} 
-                            onChange={prop.onChange.changeFromWantToRead}
+                            updateShelf = {prop.updateShelf}
+                            book={book}
                           />
-                        </li>
+                        </li>)
                       ))}
                     </ol>
                   </div>
@@ -45,13 +45,13 @@ function ListBook(prop){
                   <h2 className="bookshelf-title">Read</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                      {prop.read.map((book)=>(
-                          <li key={book.id}>
+                      {prop.books.map((book)=>(
+                          book.shelf==='read' &&(<li key={book.id}>
                             <Book 
-                            book={book} 
-                            onChange={prop.onChange.changeFromRead}
+                            updateShelf = {prop.updateShelf}
+                            book={book}
                             />
-                          </li>
+                          </li>)
                         ))}
                     </ol>
                   </div>

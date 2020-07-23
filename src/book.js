@@ -17,7 +17,9 @@ function Book(props) {
         />
         <div className="book-shelf-changer">
           <select defaultValue="move" onChange={(event)=>{
-              props.onChange(props.book,event.target.value);
+             if(event.target.value !=='none'){
+               props.updateShelf(book,event.target.value);
+             }
             }}>
             <option value="move" disabled>
               Move to...

@@ -8,84 +8,37 @@ import ListBook from "./ListBook";
 class BooksApp extends React.Component {
   state = {
     content: [],
-    currentlyReading: [],
-    wantToRead: [],
-    read: [],
+    books: []
   };
 
-  addBook(data, book) {
-    data.push(book);
-    return data;
+  componentDidMount() {
+    BooksAPI.getAll().then((data) => {
+      this.setState({
+        books: data,
+      });
+    });
   }
 
-  changeFromCurrentlyReading = (book, changeTo) => {
-    if (changeTo === "wantToRead") {
-      this.setState((currentState) => ({
-        currentlyReading: currentState.currentlyReading.filter((data) => {
-          return book.id !== data.id;
-        }),
-        wantToRead: this.addBook(currentState.wantToRead, book),
-      }));
-    } else if (changeTo === "read") {
-      this.setState((currentState) => ({
-        currentlyReading: currentState.currentlyReading.filter((data) => {
-          return book.id !== data.id;
-        }),
-        read: this.addBook(currentState.read, book),
-      }));
-    }
-  };
-  changeFromRead = (book, changeTo) => {
-    if (changeTo === "wantToRead") {
-      this.setState((currentState) => ({
-        read: currentState.read.filter((data) => {
-          return book.id !== data.id;
-        }),
-        wantToRead: this.addBook(currentState.wantToRead, book),
-      }));
-    } else if (changeTo === "currentlyReading") {
-      this.setState((currentState) => ({
-        read: currentState.read.filter((data) => {
-          return book.id !== data.id;
-        }),
-        currentlyReading: this.addBook(currentState.currentlyReading, book),
-      }));
-    }
-  };
-  addBookToShelf = (book, category) => {
-    if (category === "read") {
-      this.setState((currentState) => ({
-        read: this.addBook(currentState.read, book),
-        content: [],
-      }));
-    } else if (category === "wantToRead") {
-      this.setState((currentState) => ({
-        wantToRead: this.addBook(currentState.wantToRead, book),
-        content: [],
-      }));
-    } else if (category === "currentlyReading") {
-      this.setState((currentState) => ({
-        currentlyReading: this.addBook(currentState.currentlyReading, book),
-        content: [],
-      }));
-    }
-  };
-  changeFromWantToRead = (book, changeTo) => {
-    if (changeTo === "read") {
-      this.setState((currentState) => ({
-        wantToRead: currentState.wantToRead.filter((data) => {
-          return book.id !== data.id;
-        }),
-        read: this.addBook(currentState.read, book),
-      }));
-    } else if (changeTo === "currentlyReading") {
-      this.setState((currentState) => ({
-        wantToRead: currentState.wantToRead.filter((data) => {
-          return book.id !== data.id;
-        }),
-        currentlyReading: this.addBook(currentState.currentlyReading, book),
-      }));
-    }
+  updateShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      this.setState((prevState) => {
+        let flag=0;
+        let newBooks = prevState.books.map((book_)=>{
+            if(book_.id===book.id){
+              book_.shelf=shelf;
+              flag=1;
+            }
+            return book_;
+        })
+        if(flag===0){
+          book.shelf=shelf;
+          newBooks.push(book);
+        }
+        return {
+          books:newBooks
+        };
+      });
+    });
   };
 
   changeContent = (query) => {
@@ -102,7 +55,6 @@ class BooksApp extends React.Component {
     } else {
       this.setState(() => ({
         content: [],
-        query: "",
       }));
     }
   };
@@ -133,6 +85,10 @@ class BooksApp extends React.Component {
                   {this.state.content.map((book) => (
                     <li key={book.id}>
                       <Book
+                        updateShelf={(book,shelf) => {
+                          this.updateShelf(book,shelf);
+                          history.push("/");
+                        }}
                         book={book}
                         onChange={(book, changeTo) => {
                           this.addBookToShelf(book, changeTo);
@@ -151,19 +107,11 @@ class BooksApp extends React.Component {
           path="/"
           render={() => (
             <ListBook
-              currentlyReading={this.state.currentlyReading}
-              wantToRead={this.state.wantToRead}
-              read={this.state.read}
-              changeFromCurrentlyReading={this.changeFromCurrentlyReading}
-              onChange={{
-                changeFromCurrentlyReading: this.changeFromCurrentlyReading,
-                changeFromRead: this.changeFromRead,
-                changeFromWantToRead: this.changeFromWantToRead,
-              }}
+              books={this.state.books}
+              updateShelf={this.updateShelf}
             />
           )}
         />
-        {this.changeFromWantToRead}
       </div>
     );
   }
