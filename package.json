@@ -2,7 +2,10 @@
   "name": "myreads-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
+    "browserslist": "^4.13.0",
+    "caniuse-lite": "^1.0.30001105",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
@@ -13,7 +16,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server":"node ./src/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
