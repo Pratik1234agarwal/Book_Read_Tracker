@@ -8,7 +8,7 @@ app.use(express.static('build'));
 let port = process.env.PORT || 8080 
 
 app.listen(port,()=>{
-    console.log("Server is running at port 5000");
+    console.log("Server is running at port "+port);
 })
 
 app.get('/', function(req, res) {
