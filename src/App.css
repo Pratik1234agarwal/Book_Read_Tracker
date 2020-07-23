@@ -42,6 +42,9 @@ body, .app {
 
 .bookshelf-title {
   border-bottom: 1px solid #dedede;
+  text-align: center;
+  font-size: 2em;
+  color:rgb(97, 22, 236);
 }
 
 .bookshelf-books {
